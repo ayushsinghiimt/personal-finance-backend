@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
+const SUPABASE_JWT_SECRET = "123";
 
 const authenticateUser = (req, res, next) => {
   try {
@@ -13,6 +13,7 @@ const authenticateUser = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, SUPABASE_JWT_SECRET);
+    console.log("decoded", decoded);
     req.user = decoded;
     next();
   } catch (error) {
