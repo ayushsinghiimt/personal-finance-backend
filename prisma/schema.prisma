@@ -37,12 +37,21 @@ model Category {
 }
 
 model AssetLiability {
-  id     String  @id @default(uuid())
-  user   User    @relation(fields: [userId], references: [id])
-  userId String
+  id         String                  @id @default(uuid())
+  user       User                    @relation(fields: [userId], references: [id])
+  userId     String
+  name       String
+  type       FinancialType
+  value      Decimal
+  categoryId String
+  category   AssetLiabilityCategory  @relation(fields: [categoryId], references: [id])
+}
+
+model AssetLiabilityCategory {
+  id     String        @id @default(uuid())
   name   String
   type   FinancialType
-  value  Decimal
+  assets AssetLiability[]
 }
 
 enum TransactionType {
