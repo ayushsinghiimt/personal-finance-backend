@@ -11,8 +11,9 @@ datasource db {
 model User {
   id       String  @id @default(uuid())
   email    String  @unique
-  password String
-  fullName String?
+  password String?
+  firstName String?
+  lastName String?
   transactions Transaction[]
   assetsLiabilities AssetLiability[]
 }

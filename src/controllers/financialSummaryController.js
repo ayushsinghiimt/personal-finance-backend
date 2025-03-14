@@ -1,6 +1,6 @@
 const prisma = require("../config/db");
 
-exports.financialSummary = async (req, res) => {
+exports.getFinancialSummary = async (req, res) => {
   try {
     const userId = req.user.id;
 
