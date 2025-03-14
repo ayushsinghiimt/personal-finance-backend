@@ -15,6 +15,7 @@ app.use(express.json());
 app.use("/", (req, res) => {
   res.json({ message: "server is running" });
 });
+app.use("/api/financial-summary", transactionRoutes);
 app.use("/api/transactions", transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
