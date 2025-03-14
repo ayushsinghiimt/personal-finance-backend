@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const SUPABASE_JWT_SECRET = "123";
+const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 
 const authenticateUser = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
+    console.log("token is", token);
     if (!token) {
+      console.log("token");
       return res
         .status(401)
         .json({ message: "Unauthorized: No token provided" });

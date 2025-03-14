@@ -1,4 +1,5 @@
 const prisma = require("../config/db");
+const moment = require("moment");
 
 exports.getFinancialSummary = async (req, res) => {
   try {
@@ -109,5 +110,186 @@ exports.getFinancialSummary = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getFinancialSummaryIncomeExpense = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user is authenticated
+
+    const sixMonthsAgo = moment()
+      .subtract(6, "months")
+      .startOf("month")
+      .toDate();
+    const now = moment().endOf("month").toDate();
+
+    // Fetch transactions for the last 6 months
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+        date: {
+          gte: sixMonthsAgo,
+          lte: now,
+        },
+      },
+    });
+
+    // Group by week
+    const weeklyData = {};
+    for (let i = 0; i < 26; i++) {
+      const weekStart = moment()
+        .subtract(i, "weeks")
+        .startOf("week")
+        .format("YYYY-MM-DD");
+      weeklyData[weekStart] = { income: 0, expense: 0 };
+    }
+
+    transactions.forEach((transaction) => {
+      const weekStart = moment(transaction.date)
+        .startOf("week")
+        .format("YYYY-MM-DD");
+      if (!weeklyData[weekStart]) {
+        weeklyData[weekStart] = { income: 0, expense: 0 };
+      }
+      if (transaction.type === "INCOME") {
+        weeklyData[weekStart].income += Number(transaction.amount);
+      } else if (transaction.type === "EXPENSE") {
+        weeklyData[weekStart].expense += Number(transaction.amount);
+      }
+    });
+
+    // Convert to array of values
+    const xAxisData = [];
+    const incomeData = [];
+    const expenseData = [];
+
+    Object.keys(weeklyData)
+      .sort((a, b) => new Date(a) - new Date(b))
+      .forEach((week) => {
+        xAxisData.push(moment(week).format("MMM DD"));
+        incomeData.push(weeklyData[week].income);
+        expenseData.push(weeklyData[week].expense);
+      });
+
+    // Return in ECharts format
+    const chartOptions = {
+      tooltip: {
+        trigger: "axis",
+      },
+      legend: {
+        data: ["Income", "Expenses"],
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: xAxisData,
+      },
+      yAxis: {
+        type: "value",
+      },
+      series: [
+        {
+          name: "Income",
+          type: "line",
+          stack: "Total",
+          data: incomeData,
+        },
+        {
+          name: "Expenses",
+          type: "line",
+          stack: "Total",
+          data: expenseData,
+        },
+      ],
+    };
+
+    res.json(chartOptions);
+  } catch (error) {
+    console.error("Error fetching financial graph data:", error);
+    res.status(500).json({ error: "Failed to fetch data" });
+  }
+};
+
+exports.getExpensesByCategory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Fetch all expense transactions grouped by category
+    const expenses = await prisma.transaction.groupBy({
+      by: ["categoryId"],
+      where: {
+        userId: userId,
+        type: "EXPENSE",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    // Fetch category details
+    const categories = await prisma.category.findMany({
+      where: {
+        id: { in: expenses.map((exp) => exp.categoryId) },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    // Map category names to expenses
+    const data = expenses.map((expense) => ({
+      value: Number(expense._sum.amount || 0),
+      name:
+        categories.find((cat) => cat.id === expense.categoryId)?.name ||
+        "Unknown",
+    }));
+
+    // Format data for ECharts pie chart
+    const chartOptions = {
+      title: {
+        text: "Category-wise Expenses",
+        subtext: "Last 6 months",
+        left: "center",
+      },
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        orient: "vertical",
+        left: "left",
+      },
+      series: [
+        {
+          name: "Expenses",
+          type: "pie",
+          radius: "50%",
+          data,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
+      ],
+    };
+
+    res.status(200).json(chartOptions);
+  } catch (error) {
+    console.error("Error fetching category expenses:", error);
+    res.status(500).json({ error: "Failed to fetch category expenses" });
   }
 };

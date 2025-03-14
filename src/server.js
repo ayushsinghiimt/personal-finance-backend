@@ -13,11 +13,11 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/", (req, res) => {
-  res.json({ message: "server is running" });
-});
-app.use("/api/financial-summary", financialSummaryRoutes);
-app.use("/api/transactions", transactionRoutes);
+// app.use("/", (req, res) => {
+//   res.json({ message: "server is running" });
+// });
+app.use("/api/v1/financial-summary", financialSummaryRoutes);
+app.use("/api/v1/transactions", transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

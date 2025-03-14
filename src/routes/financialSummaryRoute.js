@@ -9,5 +9,15 @@ router.get(
   authenticateUser,
   finanCialSummaryController.getFinancialSummary
 );
+router.get(
+  "/income-expense",
+  authenticateUser,
+  finanCialSummaryController.getFinancialSummaryIncomeExpense
+);
+router.get(
+  "/expenses-category",
+  authenticateUser,
+  finanCialSummaryController.getExpensesByCategory
+);
 
 module.exports = router;
