@@ -9,7 +9,8 @@ const createUser = async (req, res) => {
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
   }
-
+  console.log("email is ", email);
+  console.log("req.body is ", req.body);
   try {
     const user = await prisma.user.create({
       data: { email },
@@ -25,7 +26,8 @@ const createUser = async (req, res) => {
 // Update user (based on id)
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, mobileNo, currency, gender } =
+    req.body;
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { id } });
@@ -35,7 +37,15 @@ const updateUser = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { email, password, firstName, lastName },
+      data: {
+        email,
+        password,
+        firstName,
+        lastName,
+        mobileNo,
+        currency,
+        gender,
+      },
     });
 
     return res.status(200).json(updatedUser);

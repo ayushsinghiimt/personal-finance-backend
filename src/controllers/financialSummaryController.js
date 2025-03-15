@@ -197,6 +197,39 @@ exports.getFinancialSummaryIncomeExpense = async (req, res) => {
       },
       yAxis: {
         type: "value",
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: "#f6f7f7d",
+          },
+        },
+      },
+      dataZoom: [
+        {
+          type: "inside", // Zoom using mouse wheel or touch
+          xAxisIndex: 0, // Enable zoom on x-axis
+          yAxisIndex: 0, // Enable zoom on y-axis
+        },
+        {
+          type: "slider",
+          show: false, // Zoom using a slider
+        },
+      ],
+      toolbox: {
+        show: true,
+        feature: {
+          saveAsImage: {}, // Save chart as an image
+          restore: {}, // Restore chart to original state
+          dataView: {}, // Display data table
+          magicType: {
+            // Switch between line, bar, stack, and tiled views
+            type: ["line", "bar"],
+          },
+          dataZoom: {
+            // Zoom in and out
+            yAxisIndex: "none",
+          },
+        },
       },
       series: [
         {
@@ -276,6 +309,7 @@ exports.getExpensesByCategory = async (req, res) => {
         orient: "vertical",
         left: "left",
       },
+
       series: [
         {
           name: "Expenses",

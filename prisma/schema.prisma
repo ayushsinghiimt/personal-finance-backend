@@ -9,12 +9,15 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String?
-  firstName String?
-  lastName String?
-  transactions Transaction[]
+  id                String             @id @default(uuid())
+  email             String             @unique
+  password          String?
+  firstName         String?
+  lastName          String?
+  mobileNo          String?
+  gender            Gender?
+  currency          Currency            @default(RUPEE)
+  transactions      Transaction[]
   assetsLiabilities AssetLiability[]
 }
 
@@ -64,4 +67,15 @@ enum TransactionType {
 enum FinancialType {
   ASSET
   LIABILITY
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Currency {
+  RUPEE   @map("₹")
+  DOLLAR  @map("$")
 }
