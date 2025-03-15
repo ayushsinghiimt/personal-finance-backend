@@ -204,12 +204,18 @@ exports.getFinancialSummaryIncomeExpense = async (req, res) => {
           type: "line",
           stack: "Total",
           data: incomeData,
+          itemStyle: {
+            color: "green",
+          },
         },
         {
           name: "Expenses",
           type: "line",
           stack: "Total",
           data: expenseData,
+          itemStyle: {
+            color: "red",
+          },
         },
       ],
     };

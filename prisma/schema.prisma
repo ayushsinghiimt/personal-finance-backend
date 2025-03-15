@@ -46,6 +46,7 @@ model AssetLiability {
   value      Decimal
   categoryId String
   category   AssetLiabilityCategory  @relation(fields: [categoryId], references: [id])
+  createdAt DateTime          @default(now())
 }
 
 model AssetLiabilityCategory {
