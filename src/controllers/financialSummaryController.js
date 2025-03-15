@@ -134,27 +134,18 @@ exports.getFinancialSummaryIncomeExpense = async (req, res) => {
       },
     });
 
-    // Group by week
-    const weeklyData = {};
-    for (let i = 0; i < 26; i++) {
-      const weekStart = moment()
-        .subtract(i, "weeks")
-        .startOf("week")
-        .format("YYYY-MM-DD");
-      weeklyData[weekStart] = { income: 0, expense: 0 };
-    }
+    // Group by day
+    const dailyData = {};
 
     transactions.forEach((transaction) => {
-      const weekStart = moment(transaction.date)
-        .startOf("week")
-        .format("YYYY-MM-DD");
-      if (!weeklyData[weekStart]) {
-        weeklyData[weekStart] = { income: 0, expense: 0 };
+      const day = moment(transaction.date).format("YYYY-MM-DD");
+      if (!dailyData[day]) {
+        dailyData[day] = { income: 0, expense: 0 };
       }
       if (transaction.type === "INCOME") {
-        weeklyData[weekStart].income += Number(transaction.amount);
+        dailyData[day].income += Number(transaction.amount);
       } else if (transaction.type === "EXPENSE") {
-        weeklyData[weekStart].expense += Number(transaction.amount);
+        dailyData[day].expense += Number(transaction.amount);
       }
     });
 
@@ -163,12 +154,12 @@ exports.getFinancialSummaryIncomeExpense = async (req, res) => {
     const incomeData = [];
     const expenseData = [];
 
-    Object.keys(weeklyData)
+    Object.keys(dailyData)
       .sort((a, b) => new Date(a) - new Date(b))
-      .forEach((week) => {
-        xAxisData.push(moment(week).format("MMM DD"));
-        incomeData.push(weeklyData[week].income);
-        expenseData.push(weeklyData[week].expense);
+      .forEach((day) => {
+        xAxisData.push(moment(day).format("MMM DD"));
+        incomeData.push(dailyData[day].income);
+        expenseData.push(dailyData[day].expense);
       });
 
     // Return in ECharts format

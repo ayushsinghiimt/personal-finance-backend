@@ -3,11 +3,11 @@ const prisma = require("../config/db");
 exports.createTransaction = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { category: categoryId, amount, type, description } = req.body;
+    const { category: categoryId, amount, type, description, date } = req.body;
     console.log(req.body);
     console.log(userId);
     const transaction = await prisma.transaction.create({
-      data: { userId, categoryId, amount, type, description },
+      data: { userId, categoryId, amount, type, description, date },
     });
     res.json(transaction);
   } catch (error) {
@@ -46,10 +46,10 @@ exports.deleteTransaction = async (req, res) => {
 exports.updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId, categoryId, amount, type, description } = req.body;
+    const { userId, categoryId, amount, type, description, date } = req.body;
     const transaction = await prisma.transaction.update({
       where: { id: id },
-      data: { userId, categoryId, amount, type, description },
+      data: { userId, categoryId, amount, type, description, date },
     });
     res.json(transaction);
   } catch (error) {
