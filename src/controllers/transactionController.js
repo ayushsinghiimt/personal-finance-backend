@@ -4,8 +4,7 @@ exports.createTransaction = async (req, res) => {
   try {
     const userId = req.user.id;
     const { category: categoryId, amount, type, description, date } = req.body;
-    console.log(req.body);
-    console.log(userId);
+
     const transaction = await prisma.transaction.create({
       data: { userId, categoryId, amount, type, description, date },
     });
@@ -18,7 +17,7 @@ exports.createTransaction = async (req, res) => {
 exports.getTransactionsByUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log(userId, "get transaction by user");
+
     const transactions = await prisma.transaction.findMany({
       where: { userId },
       orderBy: {

@@ -154,7 +154,7 @@ const transactions = [
 ];
 
 async function seed() {
-  console.log("🌱 Seeding database...");
+  console.log("Seeding database...");
 
   // Create User
   const user = await prisma.user.create({

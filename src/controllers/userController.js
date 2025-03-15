@@ -9,8 +9,7 @@ const createUser = async (req, res) => {
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
   }
-  console.log("email is ", email);
-  console.log("req.body is ", req.body);
+
   try {
     const user = await prisma.user.create({
       data: { email },

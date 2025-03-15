@@ -189,7 +189,7 @@ async function main() {
     },
   ];
 
-  console.log("🌱 Seeding database...");
+  console.log(" Seeding database...");
 
   // Create User
 
