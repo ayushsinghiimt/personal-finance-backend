@@ -31,7 +31,9 @@ To get started with this backend, follow these steps:
     ```
 
 DATABASE_URL=
-PORT=  
+
+PORT =
+
 SUPABASE_JWT_SECRET=
 
 ```
