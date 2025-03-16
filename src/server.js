@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
 
 // const authRoutes = require("./routes/authRoutes.js");
 const transactionRoutes = require("./routes/transactionRoutes.js");
@@ -11,13 +12,12 @@ const userRoute = require("./routes/userRoute.js");
 dotenv.config();
 
 const app = express();
+app.use(helmet());
+
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
-// Routes
-// app.use("/", (req, res) => {
-//   res.json({ message: "server is running" });
-// });
 app.use("/api/v1/financial-summary", financialSummaryRoutes);
 app.use("/api/v1/transactions", transactionRoutes);
 app.use("/api/v1/assets-liabilities", assetLiabilityRoute);
