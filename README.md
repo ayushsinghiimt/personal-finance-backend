@@ -32,23 +32,19 @@ To get started with this backend, follow these steps:
 
 DATABASE_URL=
 PORT=  
- SUPABASE_JWT_SECRET=
+SUPABASE_JWT_SECRET=
 
-````
+```
 
 3. **Install Packages:**
 
   Navigate to the project's root directory in your terminal and run the following command to install the necessary Node.js packages:
 
-  ```bash
   npm install
-
-````
 
 4. **Start the Server:**
 
-   After installing the packages and configuring the environment variables, start the server by running the following command in your terminal:
+  After installing the packages and configuring the environment variables, start the server by running the following command in your terminal:
 
-   ```bash
-   node src/server.js
-   ```
+  node src/server.js
+```
