@@ -24,5 +24,6 @@ const upload = multer({ storage: storage });
 // For now, I'll assume the folder 'uploads' needs to be created.)
 
 router.post("/process", upload.array("files"), authenticateUser, whatsappController.processMessage);
+router.post("/webhook", whatsappController.handleTwilioWebhook);
 
 module.exports = router;
