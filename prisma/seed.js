@@ -1,7 +1,12 @@
 // import { PrismaClient } from "@prisma/client";
+// In prisma/seed.js
+require('dotenv').config({ path: '../.env' }); // Look up one directory for the .env file
 const { PrismaClient } = require("@prisma/client");
 const { addWeeks, subMonths } = require("date-fns");
 const prisma = new PrismaClient();
+
+console.log(process.env.DATABASE_URL)
+console.log("hii")
 
 async function main() {
   const categories = [
