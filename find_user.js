@@ -1,7 +1,5 @@
 const dotenv = require("dotenv");
 const result = dotenv.config();
-console.log("Dotenv result:", result.error ? result.error : "Loaded");
-console.log("DATABASE_URL:", process.env.DATABASE_URL ? "Set" : "Not Set");
 const prisma = require("./src/config/db");
 
 async function main() {

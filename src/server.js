@@ -10,7 +10,7 @@ const assetLiabilityRoute = require("./routes/assetLiabilityRoute.js");
 const userRoute = require("./routes/userRoute.js");
 
 dotenv.config();
-console.log(process.env.DATABASE_URL)
+
 const app = express();
 app.use(helmet());
 
