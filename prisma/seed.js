@@ -5,8 +5,6 @@ const { PrismaClient } = require("@prisma/client");
 const { addWeeks, subMonths } = require("date-fns");
 const prisma = new PrismaClient();
 
-console.log(process.env.DATABASE_URL)
-console.log("hii")
 
 async function main() {
   const categories = [
