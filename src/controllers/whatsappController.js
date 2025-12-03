@@ -76,14 +76,22 @@ async function processTransactionWithGemini(user, text, mediaParts) {
 
     let prompt = `
       You are a financial assistant. Extract transaction details from the following input.
-      The input can be a text description and/or multiple images/PDFs of receipts/invoices.
+      The input can be a text description and/or  images/PDFs of receipts/invoices.
       
       Instructions:
       1. Analyze all provided text and files.
       2. Identify ALL distinct transactions. 
-      3. If multiple files belong to the same transaction (e.g., multi-page invoice), merge them into one transaction.
-      4. If multiple files represent different transactions, list them separately.
-      
+      3. identify the category of each transaction.
+      4. identify the type of each transaction (INCOME or EXPENSE).
+      5. identify the amount of each transaction.
+      6. identify the description of each transaction.
+      7. identify the date of each transaction on media check this details this is must be there.
+      8. if the date is not specified, use the current date: ${new Date().toISOString()}
+      9. if the category doesn't match exactly, pick the closest one.
+      10. if the type is not specified, use the closest one.
+      11. if the description is not specified, write short description.
+
+
       Available Categories: ${categoryNames}
       
       Output JSON format (Array of objects):
